@@ -87,6 +87,7 @@ def main():
     p.add_argument("-m", "--minor", dest="minor", default=False, action="store_true", help="increment minor number")
     p.add_argument("-M", "--major", dest="major", default=False, action="store_true", help="increment major number")
     p.add_argument("-b", "--build", dest="build", default=False, action="store_true", help="increment build number")
+    p.add_argument("-B", "--build-number", dest="buildnumber", help="create a tag with this exact build number")
     p.add_argument("-c", "--changelog", dest="changelog", help="description of the changes in the new version")
 
     p.add_argument("-n", "--dry-run", dest="dry_run", default=False, help="don't perform any changes")
@@ -138,7 +139,11 @@ def main():
 
         create_new_version_tag(ver, changelog)
 
-    if args.build:
+    if args.buildnumber:
+        build_number = int(args.buildnumber)
+        log.debug("creating build number: {0}".format(build_number))
+        create_new_build_tag(ver, build_number)
+    elif args.build:
         last_build_number = _get_latest_build_number(tags)
         log.debug("latest build number for version {0}: {1}".format(ver_str, last_build_number))
         last_build_number += 1
