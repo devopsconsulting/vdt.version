@@ -108,9 +108,6 @@ def main():
         log.error("cannot get tags")
         return -2
 
-    last_build_number = _get_latest_build_number(tags)
-    log.debug("latest build number for version {0}: {1}".format(ver_str, last_build_number))
-
     # See what operation needs to be performed
     ver_changed = False
     if args.patch:
@@ -142,6 +139,8 @@ def main():
         create_new_version_tag(ver, changelog)
 
     if args.build:
+        last_build_number = _get_latest_build_number(tags)
+        log.debug("latest build number for version {0}: {1}".format(ver_str, last_build_number))
         last_build_number += 1
         log.debug("incremented build number: {0}".format(last_build_number))
         create_new_build_tag(ver, last_build_number)
