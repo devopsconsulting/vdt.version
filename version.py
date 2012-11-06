@@ -49,27 +49,6 @@ def call_git_describe(abbrev=4):
         return None
 
 
-def read_release_version():
-    try:
-        f = open("RELEASE-VERSION", "r")
-
-        try:
-            version = f.readlines()[0]
-            return version.strip()
-
-        finally:
-            f.close()
-
-    except:
-        return None
-
-
-def write_release_version(version):
-    f = open("RELEASE-VERSION", "w")
-    f.write("%s\n" % version)
-    f.close()
-
-
 def get_git_version(abbrev=4):
     # Read in the version that's currently in RELEASE-VERSION.
 
