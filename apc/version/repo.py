@@ -31,7 +31,7 @@ class GitRepository(object):
         if self.config.build_number:
             version.build_number = self.config.build_number
 
-        if config.dry_run:
+        if self.config.dry_run:
             log.info('Not updating repo to version {0}, because of --dry-run'.format(version))
         else:
             self.call_plugin_function('set_version', version)
@@ -39,10 +39,10 @@ class GitRepository(object):
         return version
 
     def build_package(self, version):
-        if config.dry_run:
+        if self.config.dry_run:
             log.info("Not updatting package version to {0}, because of dry-run".format(version))
         else:
-            call_plugin_function('set_package_version', version)
-            call_plugin_function('build_package', version)
+            self.call_plugin_function('set_package_version', version)
+            self.call_plugin_function('build_package', version)
 
     
