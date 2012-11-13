@@ -1,3 +1,6 @@
+"""
+The functions and objects in this file can be used in your plugins.
+"""
 import os.path
 
 

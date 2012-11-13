@@ -4,7 +4,13 @@ log = logging.getLogger('apc.version.repo')
 
 from apc.version.utils import load_plugin_by_name, UnknowPlugin
 
+
 class GitRepository(object):
+    """
+    This class represent a git repository in which tags need
+    to be updated and from which debian packages can be built.
+    """
+
     def __init__(self, config):
         self.config = config
         self.default_plugin = load_plugin_by_name('default')
@@ -18,8 +24,10 @@ class GitRepository(object):
         return function(*args, **kwargs)
 
     def update_version(self, step=1):
+        # retrive latest version with the plugin
         version = self.call_plugin_function('get_version')
         
+        # update the version based on the flags passed.
         if self.config.patch:
             version.patch += step
         if self.config.minor:
@@ -31,6 +39,7 @@ class GitRepository(object):
         if self.config.build_number:
             version.build_number = self.config.build_number
 
+        # create a new tag in the repo with the new version.
         if self.config.dry_run:
             log.info('Not updating repo to version {0}, because of --dry-run'.format(version))
         else:
@@ -42,7 +51,7 @@ class GitRepository(object):
         if self.config.dry_run:
             log.info("Not updatting package version to {0}, because of dry-run".format(version))
         else:
+            # if needed update the version in the package
             self.call_plugin_function('set_package_version', version)
+            # create a debian package with the new version.
             self.call_plugin_function('build_package', version)
-
-    
