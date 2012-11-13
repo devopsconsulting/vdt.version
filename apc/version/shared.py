@@ -1,3 +1,6 @@
+import os.path
+
+
 BUILD_TAG = 'jenkins'
 
 
@@ -63,7 +66,7 @@ class Version(object):
     >>> str(a)
     '4.0.0-lol-876876'
     """
-    def __init__(self, version_string):
+    def __init__(self, version_string, annotated=False, changelog=""):
         (version, self.build_tag, self.build_number) = \
             parse_version_string(version_string)
         
@@ -71,6 +74,8 @@ class Version(object):
         self._major = version[0]
         self._minor = version[1]
         self.patch = version[2]
+        self.annotated = annotated
+        self._changelog=changelog
 
     @property
     def major(self):
@@ -94,6 +99,16 @@ class Version(object):
     @property
     def version(self):
         return [self._major, self._minor, self.patch]
+
+    @property
+    def changelog(self):
+        if os.path.isfile(self.changelog):
+            with open(self.changelog) as f:
+                changelog = f.read()
+        else:
+            changelog = self.changelog
+
+        return changelog
 
     def __str__(self):
         if self.build_number is not None:
