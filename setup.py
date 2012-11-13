@@ -14,7 +14,11 @@ setup(name=pkgname,
       include_package_data=True,
       namespace_packages=['apc'],
       zip_safe=True,
-      install_requires=["setuptools"],
+      install_requires=[
+          "setuptools",
+          "straight.plugin",
+          "apc.versionplugin.default",
+      ],
       entry_points={
           'console_scripts':[
               'apc-version = apc.version.main:main'
