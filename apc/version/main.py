@@ -5,10 +5,18 @@ import subprocess
 import argparse
 import os
 
-BUILD_TAG = "-jenkins-"
+BUILD_TAG = "jenkins"
 
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger('repo-ver')
+
+def format_version(version, build_number=None, build_tag=BUILD_TAG):
+    formatted_version = ".".join(map(str, version))
+
+    if build_number is not None:
+        return "{formatted_version}-{build_tag}-{build_number}".format(**locals())
+    
+    return formatted_version
 
 def get_build_tags_from_version(base_version, build_tag=BUILD_TAG):
     """
@@ -26,19 +34,17 @@ def create_new_build_tag(ver, build_number, build_tag=BUILD_TAG):
     Create a new tag in the form of "base_version-build_tag-build_number"
     """
     try:
-        version = ".".join(map(str, ver))
-        args = ["git", "tag", "{0}{1}{2}".format(version, build_tag, build_number)]
+        args = ["git", "tag", format_version(ver, build_tag, build_number)]
         subprocess.check_call(args)
     except Exception as e:
         log.exception(e)
 
-def create_new_version_tag(ver, changelog, build_tag=BUILD_TAG):
+def create_new_version_tag(ver, changelog):
     """
     Create a new tag in the form of "base_version-build_tag-build_number"
     """
     try:
-        version = ".".join(map(str, ver))
-        args = ["git", "tag", "-a", version, "-m", changelog]
+        args = ["git", "tag", "-a", format_version(ver), "-m", changelog]
         subprocess.check_call(args)
     except Exception as e:
         log.exception(e)
@@ -90,10 +96,10 @@ def main():
     p.add_argument("-B", "--build-number", dest="buildnumber", help="create a tag with this exact build number")
     p.add_argument("-c", "--changelog", dest="changelog", help="description of the changes in the new version")
 
-    p.add_argument("-n", "--dry-run", dest="dry_run", default=False, help="don't perform any changes")
+    p.add_argument("-n", "--dry-run", dest="dry_run", default=False, action="store_true", help="don't perform any changes")
 
     args = p.parse_args()
-
+    
     try:
         ver_str = get_git_version()
         ver = map(int, ver_str.split(".", 3))
@@ -137,18 +143,24 @@ def main():
         else:
             changelog = args.changelog
 
-        create_new_version_tag(ver, changelog)
+        log.debug("Tagging as version {0}".format(format_version(ver)))
+        if args.dry_run is False:
+            create_new_version_tag(ver, changelog)
 
     if args.buildnumber:
         build_number = int(args.buildnumber)
         log.debug("creating build number: {0}".format(build_number))
-        create_new_build_tag(ver, build_number)
+        log.debug("Updating to version {0}".format(format_version(ver, build_number)))
+        if args.dry_run is False:
+            create_new_build_tag(ver, build_number)
     elif args.build:
         last_build_number = _get_latest_build_number(tags)
         log.debug("latest build number for version {0}: {1}".format(ver_str, last_build_number))
         last_build_number += 1
         log.debug("incremented build number: {0}".format(last_build_number))
-        create_new_build_tag(ver, last_build_number)
+        log.debug("Updating to version {0}".format(format_version(ver, build_number)))
+        if args.dry_run is False:
+            create_new_build_tag(ver, last_build_number)
 
 if __name__ == "__main__":
     main()
