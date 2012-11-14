@@ -18,7 +18,7 @@ def parse_version_string(version_string):
     """
     components = version_string.split('-') + [None, None]
     version = map(int, components[0].split('.'))
-    build_tag = components[1]
+    build_tag = components[1] if components[1] else BUILD_TAG
     build_number = int(components[2]) if components[2] else components[2]
 
     return (version, build_tag, build_number)
@@ -43,7 +43,10 @@ def format_version(version, build_number=None, build_tag=BUILD_TAG):
     return formatted_version
 
 
-class VersionNotFound(Exception):
+class VersionError(Exception):
+    pass
+
+class VersionNotFound(VersionError):
     pass
 
 

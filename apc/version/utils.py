@@ -3,7 +3,7 @@ from straight.plugin import load
 
 PLUGIN_NAMESPACE = 'apc.versionplugin'
 
-class UnknowPlugin(Exception):
+class UnknownPlugin(Exception):
     def __init__(self, plugins):
         self.message = "Plugin unknown, try one of %s" % plugins
 

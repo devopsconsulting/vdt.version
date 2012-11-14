@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import logging
-
 import argparse
+import subprocess
+
 from apc.version.repo import GitRepository
 from apc.version.shared import VersionNotFound
-
+from apc.version.utils import UnknownPlugin
 
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger('apc.version')
@@ -28,8 +29,10 @@ def main():
         repo = GitRepository(args)
         new_version = repo.update_version()
         repo.build_package(new_version)
-    except (VersionNotFound, StandardError) as e:
+    except (VersionError, ,UnknownPlugin) as e:
         logging.error(e.message)
+        # if something went wrong undo the tagging.
+        subprocess.call(['git', 'tag', '--delete=%s' % new_version])
 
 
 if __name__ == "__main__":
