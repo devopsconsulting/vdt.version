@@ -12,7 +12,7 @@ def parse_version_string(version_string):
     Parse a version string into it's components.
     
     >>> parse_version_string("0.1")
-    ([0, 1], 'jenkins', None, None)
+    ([0, 1], 'jenkins', None)
     >>> parse_version_string("0.3.2-jenkins-3447876")
     ([0, 3, 2], 'jenkins', 3447876)
     """
