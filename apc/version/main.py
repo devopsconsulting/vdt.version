@@ -29,7 +29,7 @@ def main():
         repo = GitRepository(args)
         new_version = repo.update_version()
         repo.build_package(new_version)
-    except (VersionError, ,UnknownPlugin) as e:
+    except (VersionError ,UnknownPlugin) as e:
         logging.error(e.message)
         # if something went wrong undo the tagging.
         subprocess.call(['git', 'tag', '--delete=%s' % new_version])
