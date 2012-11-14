@@ -23,10 +23,13 @@ class GitRepository(object):
         function = getattr(self.picked_plugin, name, getattr(self.default_plugin, name))
         return function(*args, **kwargs)
 
-    def update_version(self, step=1):
-        # retrive latest version with the plugin
-        version = self.call_plugin_function('get_version')
+    def get_version(self):
+        "retrieve latest version with the plugin"
+        return self.call_plugin_function('get_version')
         
+    def update_version(self, version, step=1):
+        "Compute an new version and write it as a tag"
+
         # update the version based on the flags passed.
         if self.config.patch:
             version.patch += step
@@ -43,7 +46,7 @@ class GitRepository(object):
         if self.config.dry_run:
             log.info('Not updating repo to version {0}, because of --dry-run'.format(version))
         else:
-            self.call_plugin_function('set_version', version)
+            version = self.call_plugin_function('set_version', version)
 
         return version
 

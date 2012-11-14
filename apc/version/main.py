@@ -4,12 +4,8 @@ import argparse
 import subprocess
 
 from apc.version.repo import GitRepository
-from apc.version.shared import VersionNotFound
+from apc.version.shared import VersionError
 from apc.version.utils import UnknownPlugin
-
-logging.basicConfig(level=logging.DEBUG)
-log = logging.getLogger('apc.version')
-
 
 def main():
     p = argparse.ArgumentParser(description="Version increment tool for GIT repositories")
@@ -22,13 +18,22 @@ def main():
     p.add_argument("-c", "--changelog", dest="changelog", help="description of the changes in the new version")
     p.add_argument("-n", "--dry-run", dest="dry_run", default=False, action="store_true", help="don't perform any changes")
     p.add_argument("--plugin", default='default', help='The plugin used to get the version and build the package')
-
+    p.add_argument("--skip-build", default=False, dest="skip_build" , action="store_true", help="tag only, don't build")
+    p.add_argument("--skip-tag", default=False, dest="skip_tag", action="store_true", help="build only, don't tag")
+    p.add_argument("-v", "--verbose", default=False, dest="verbose", action="store_true", help="more output")
     args = p.parse_args()
+
+    loglevel = logging.DEBUG if args.verbose else logging.INFO
+    logging.basicConfig(level=loglevel)
+    log = logging.getLogger('apc.version')
 
     try:
         repo = GitRepository(args)
-        new_version = repo.update_version()
-        repo.build_package(new_version)
+        version = repo.get_version()
+        if not args.skip_tag:
+            version = repo.update_version(version)
+        if not args.skip_build:
+            repo.build_package(version)
     except (VersionError ,UnknownPlugin) as e:
         logging.error(e.message)
         # if something went wrong undo the tagging.
