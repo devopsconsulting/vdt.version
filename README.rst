@@ -60,7 +60,7 @@ builds a package is::
 
     # build detectionmodule package and upload needed files
     cd $WORKSPACE/src/detectionmodule
-    fakeroot $WORKSPACE/bin/apc-version -v --build-number=$1 --plugin=debianize --skip-tag
+    fakeroot $WORKSPACE/bin/apc-version -v --plugin=debianize --skip-tag
     upload python-detectionmodule_*.deb
     upload python-detectionmodule.d*.deb
     upload python-puka_*.deb
