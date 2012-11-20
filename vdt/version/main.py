@@ -39,7 +39,7 @@ def main():
     
     loglevel = logging.DEBUG if args.verbose else logging.INFO
     logging.basicConfig(level=loglevel)
-    log = logging.getLogger('apc.version')
+    log = logging.getLogger('vdt.version')
     
     run(args)
 

@@ -1,6 +1,6 @@
 import logging
 
-log = logging.getLogger('apc.version.repo')
+log = logging.getLogger('vdt.version.repo')
 
 from vdt.version.utils import load_plugin_by_name
 

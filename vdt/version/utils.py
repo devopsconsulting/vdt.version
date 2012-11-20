@@ -1,7 +1,7 @@
 from straight.plugin import load
 
 
-PLUGIN_NAMESPACE = 'apc.versionplugin'
+PLUGIN_NAMESPACE = 'vdt.versionplugin'
 
 class UnknownPlugin(Exception):
     def __init__(self, plugins):
