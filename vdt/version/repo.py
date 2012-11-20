@@ -2,7 +2,7 @@ import logging
 
 log = logging.getLogger('apc.version.repo')
 
-from apc.version.utils import load_plugin_by_name
+from vdt.version.utils import load_plugin_by_name
 
 
 class GitRepository(object):

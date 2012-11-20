@@ -3,9 +3,9 @@ import logging
 import argparse
 import subprocess
 
-from apc.version.repo import GitRepository
-from apc.version.shared import VersionError
-from apc.version.utils import UnknownPlugin
+from vdt.version.repo import GitRepository
+from vdt.version.shared import VersionError
+from vdt.version.utils import UnknownPlugin
 
 def run(config):
     try:
