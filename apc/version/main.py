@@ -7,7 +7,7 @@ from apc.version.repo import GitRepository
 from apc.version.shared import VersionError
 from apc.version.utils import UnknownPlugin
 
-def main(config):
+def run(config):
     try:
         repo = GitRepository(config)
         version = repo.get_version()
@@ -21,9 +21,9 @@ def main(config):
         subprocess.call(['git', 'tag', '--delete=%s' % new_version])
 
 
-if __name__ == "__main__":
+def main():
     p = argparse.ArgumentParser(description="Version increment tool for GIT repositories")
-
+    
     p.add_argument("-p", "--patch", default=False, action="store_true", help="increment the patch number")
     p.add_argument("-m", "--minor", default=False, action="store_true", help="increment minor number")
     p.add_argument("-M", "--major", default=False, action="store_true", help="increment major number")
@@ -36,10 +36,14 @@ if __name__ == "__main__":
     p.add_argument("--skip-tag", default=False, dest="skip_tag", action="store_true", help="build only, don't tag")
     p.add_argument("-v", "--verbose", default=False, dest="verbose", action="store_true", help="more output")
     args = p.parse_args()
-
+    
     loglevel = logging.DEBUG if args.verbose else logging.INFO
     logging.basicConfig(level=loglevel)
     log = logging.getLogger('apc.version')
     
-    main(args)
+    run(args)
+
+
+if __name__ == "__main__":
+    main()
 
