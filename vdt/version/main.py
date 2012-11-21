@@ -18,7 +18,7 @@ def run(config):
     except (VersionError, UnknownPlugin) as e:
         logging.error(e.message)
         # if something went wrong undo the tagging.
-        subprocess.call(['git', 'tag', '--delete=%s' % new_version])
+        subprocess.call(['git', 'tag', '--delete=%s' % version])
 
 
 def main():
