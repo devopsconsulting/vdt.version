@@ -108,11 +108,11 @@ class Version(object):
 
     @property
     def changelog(self):
-        if os.path.isfile(self.changelog):
-            with open(self.changelog) as f:
+        if os.path.isfile(self._changelog):
+            with open(self._changelog) as f:
                 changelog = f.read()
         else:
-            changelog = self.changelog
+            changelog = self._changelog
 
         return changelog
 
