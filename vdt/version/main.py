@@ -5,9 +5,10 @@ import subprocess
 
 from vdt.version.repo import GitRepository
 from vdt.version.shared import VersionError
-from vdt.version.utils import UnknownPlugin
+from vdt.version.utils import UnknownPlugin, query_yes_no
 
 def run(config):
+    version = None
     try:
         repo = GitRepository(config)
         version = repo.get_version()
@@ -17,8 +18,10 @@ def run(config):
             repo.build_package(version)
     except (VersionError, UnknownPlugin) as e:
         logging.error(e.message)
-        # if something went wrong undo the tagging.
-        subprocess.call(['git', 'tag', '--delete=%s' % version])
+        # if something went wrong, ask to undo the tagging.
+        msg = "An error occurred, do you need me to remove the tag %s?"
+        if version and query_yes_no(msg % version, default="no"):
+            subprocess.call(['git', 'tag', '--delete' , str(version)])
 
 
 def main():
