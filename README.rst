@@ -73,19 +73,17 @@ Plugins
 
 With plugins the version tool can be taught how to version or package your repositories.
 
-Create a new python package in the acp.versionplugin namespace and implement any of the following methods:
+Create a new python package in the acp.versionplugin namespace and implement any of the following methods::
 
-```
-def get_version() (must return am apc.versionplugin.shared.Version object)
-def set_version(version) (must return am apc.versionplugin.shared.Version object)
-def build_package(version)
-def set_package_version(version)
-```
+    def get_version() (must return am vdt.versionplugin.shared.Version object)
+    def set_version(version) (must return am vdt.versionplugin.shared.Version object)
+    def build_package(version)
+    def set_package_version(version)
 
 Implementing these methods is **optional**. The ones you don't implement will be taken
-from https://github.dtc.avira.com/APC/apc.versionplugin.default (WIP)
+from https://github.dtc.avira.com/VDT/vdt.versionplugin.default (WIP)
 
-A good example of a plugin that has packaging covered is: https://github.dtc.avira.com/APC/apc.versionplugin.debianize
+A good example of a plugin that has packaging covered is: https://github.dtc.avira.com/VDT/vdt.versionplugin.debianize
 
 If your plugin is called ``balla`` it should live in a package called ``acp.versionplugin.balla``.
 
