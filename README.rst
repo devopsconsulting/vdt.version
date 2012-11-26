@@ -38,6 +38,9 @@ This tool is to be used in a jenkins build to automate versioning and packaging.
 Automated versioning
 --------------------
 
+The default plugin implements versions according to http://semver.org/. It is highly
+recommended to use that versioning scheme as well.
+
 Versions are stored as tags in the repository. Each succesful build can yield a new tag.
 Each commit will only be tagged *once*. Since we might not need a package from every build,
 the tagging of a succesful build and the building of a package can be decoupled
