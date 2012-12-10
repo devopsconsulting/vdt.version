@@ -55,7 +55,9 @@ class Version(object):
     Represent a version object with a nice
     interface for incrementing.
     
-    >>> a = Version('1.2.3-koe-4646')
+    >>> a = Version('1.2.3-koe-4646', extra_args=['hai'])
+    >>> a.extra_args
+    ['hai']
     >>> a.patch += 4
     >>> str(a)
     '1.2.7-koe-4646'
@@ -72,7 +74,7 @@ class Version(object):
     >>> str(a)
     '4.0.0-lol-876876'
     """
-    def __init__(self, version_string, annotated=False, changelog=""):
+    def __init__(self, version_string, annotated=False, changelog="", extra_args=[]):
         (version, self.build_tag, self.build_number) = \
             parse_version_string(version_string)
         
@@ -81,7 +83,8 @@ class Version(object):
         self._minor = version[1]
         self.patch = version[2]
         self.annotated = annotated
-        self._changelog=changelog
+        self._changelog = changelog
+        self.extra_args = extra_args
 
     @property
     def major(self):

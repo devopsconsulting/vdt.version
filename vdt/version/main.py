@@ -7,11 +7,15 @@ from vdt.version.repo import GitRepository
 from vdt.version.shared import VersionError
 from vdt.version.utils import UnknownPlugin, query_yes_no
 
-def run(config):
+def run(config, extra_args):
     version = None
     try:
         repo = GitRepository(config)
         version = repo.get_version()
+        # add the extra_args (which are unparsed), to the version object.
+        # these can be used in plugins.
+        version.extra_args = extra_args
+
         if not config.skip_tag:
             version = repo.update_version(version)
         if not config.skip_build:
@@ -38,13 +42,13 @@ def main():
     p.add_argument("--skip-build", default=False, dest="skip_build" , action="store_true", help="tag only, don't build")
     p.add_argument("--skip-tag", default=False, dest="skip_tag", action="store_true", help="build only, don't tag")
     p.add_argument("-v", "--verbose", default=False, dest="verbose", action="store_true", help="more output")
-    args = p.parse_args()
+    args, extra_args = p.parse_known_args()
     
     loglevel = logging.DEBUG if args.verbose else logging.INFO
     logging.basicConfig(level=loglevel)
     log = logging.getLogger('vdt.version')
     
-    run(args)
+    run(args, extra_args)
 
 
 if __name__ == "__main__":
