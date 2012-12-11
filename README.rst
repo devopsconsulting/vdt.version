@@ -93,3 +93,20 @@ If your plugin is called ``balla`` it should live in a package called ``acp.vers
 The above four methods, if implemented will be imported like this::
 
     from acp.versionplugin.balla imported get_version
+
+Extra arguments
+===============
+
+When writing a plugin, it might be useful to have some extra arguments, which are passed to your plugin.
+Rest assured, that is possible. Any argument unknown to vdt.version will be available in the ``Version``
+object passed to ``set_version``, ``build_package`` and ``set_package_version``.
+
+That means in your plugin you can do something like::
+
+    import argparse
+    plugin_arg_parser = argparse.ArgumentParser(description="Weeping plugin")
+    plugin_arg_parser.p.add_argument("-Q", "--qq", help="Makes the plugin cry")
+
+    def build_package(version):
+        plugin_args = plugin_arg_parser.parse_args(version.extra_args)
+        # do something and have args parsed!
