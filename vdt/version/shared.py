@@ -2,7 +2,7 @@
 The functions and objects in this file can be used in your plugins.
 """
 import os.path
-
+import contextlib
 
 BUILD_TAG = 'jenkins'
 
@@ -118,6 +118,17 @@ class Version(object):
             changelog = self._changelog
 
         return changelog
+
+    @property
+    @contextlib.contextmanager
+    def checkout_tag(self):
+        try:
+            branch = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).rstrip()
+            subprocess.check_call(['git', 'checkout', str(self)])
+            yield
+            subprocess.check_call(['git', 'checkout', branch])
+        except subprocess.CalledProcessError as e:
+            log.error("Package creation failed: {0}".format(e))
 
     def __str__(self):
         if self.build_number is not None:
