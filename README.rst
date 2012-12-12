@@ -8,7 +8,7 @@ A package can be built from a tag.
 
 ::
 
-    usage: apc-version [-h] [-p] [-m] [-M] [-b] [-B BUILD_NUMBER] [-c CHANGELOG]
+    usage: version [-h] [-p] [-m] [-M] [-b] [-B BUILD_NUMBER] [-c CHANGELOG]
                        [-n] [--plugin PLUGIN] [--skip-build] [--skip-tag] [-v]
 
     Version increment tool for GIT repositories
@@ -49,7 +49,7 @@ succesful build is::
 
     # tag detectionmodule
     cd $WORKSPACE/src/detectionmodule
-    $WORKSPACE/bin/apc-version -v --build-number=$1 --plugin=debianize --skip-build
+    $WORKSPACE/bin/version -v --build-number=$1 --plugin=debianize --skip-build
     git push --tags
 
 Automated packaging
@@ -63,7 +63,7 @@ builds a package is::
 
     # build detectionmodule package and upload needed files
     cd $WORKSPACE/src/detectionmodule
-    fakeroot $WORKSPACE/bin/apc-version -v --plugin=debianize --skip-tag
+    fakeroot $WORKSPACE/bin/version -v --plugin=debianize --skip-tag
     upload python-detectionmodule_*.deb
     upload python-detectionmodule.d*.deb
     upload python-puka_*.deb
