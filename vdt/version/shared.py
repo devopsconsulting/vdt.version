@@ -3,9 +3,10 @@ The functions and objects in this file can be used in your plugins.
 """
 import os.path
 import contextlib
+import logging
 
 BUILD_TAG = 'jenkins'
-
+log = logging.getLogger('vdt.version.shared')
 
 def parse_version_string(version_string):
     """
