@@ -18,6 +18,8 @@ def run(config, extra_args):
 
         if not config.skip_tag:
             version = repo.update_version(version)
+            if not version.extra_args:
+                version.extra_args = extra_args
         if not config.skip_build:
             repo.build_package(version)
     except (VersionError, UnknownPlugin) as e:
