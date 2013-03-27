@@ -76,7 +76,7 @@ class Version(object):
     >>> str(a)
     '4.0.0-lol-876876'
     """
-    def __init__(self, version_string, annotated=False, changelog="", extra_args=[]):
+    def __init__(self, version_string, annotated=False, changelog="", extra_args=[], userdata={}):
         (version, self.build_tag, self.build_number) = \
             parse_version_string(version_string)
         
@@ -87,6 +87,7 @@ class Version(object):
         self.annotated = annotated
         self._changelog = changelog
         self.extra_args = extra_args
+        self.userdata = userdata
 
     @property
     def major(self):
