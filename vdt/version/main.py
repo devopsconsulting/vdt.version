@@ -11,13 +11,12 @@ def run(config, extra_args):
     version = None
     try:
         repo = GitRepository(config)
-        version = repo.get_version()
-        # add the extra_args (which are unparsed), to the version object.
-        # these can be used in plugins.
-        version.extra_args = extra_args
+        version = repo.get_version(extra_args)
 
         if not config.skip_tag:
             version = repo.update_version(version)
+            # this is a cludge to avoid programmer error.
+            # we don't want the extra args to get lost in update_version.
             if not version.extra_args:
                 version.extra_args = extra_args
         if not config.skip_build:

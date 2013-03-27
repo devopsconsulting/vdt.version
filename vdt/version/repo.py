@@ -23,9 +23,9 @@ class GitRepository(object):
         function = getattr(self.picked_plugin, name, getattr(self.default_plugin, name))
         return function(*args, **kwargs)
 
-    def get_version(self):
+    def get_version(self, version_args):
         "retrieve latest version with the plugin"
-        return self.call_plugin_function('get_version')
+        return self.call_plugin_function('get_version', version_args)
         
     def update_version(self, version, step=1):
         "Compute an new version and write it as a tag"
