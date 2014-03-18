@@ -75,7 +75,7 @@ Plugins
 
 With plugins the version tool can be taught how to version or package your repositories.
 
-Create a new python package in the acp.versionplugin namespace and implement any of the following methods::
+Create a new python package in the vdt.versionplugin namespace and implement any of the following methods::
 
     def get_version() (must return am vdt.versionplugin.shared.Version object)
     def set_version(version) (must return am vdt.versionplugin.shared.Version object)
@@ -87,11 +87,11 @@ from https://github.com/devopsconsulting/vdt.versionplugin.default (WIP)
 
 A good example of a plugin that has packaging covered is: https://github.com/devopsconsulting/vdt.versionplugin.debianize
 
-If your plugin is called ``balla`` it should live in a package called ``acp.versionplugin.balla``.
+If your plugin is called ``balla`` it should live in a package called ``vdt.versionplugin.balla``.
 
 The above four methods, if implemented will be imported like this::
 
-    from acp.versionplugin.balla imported get_version
+    from vdt.versionplugin.balla imported get_version
 
 Extra arguments
 ===============
