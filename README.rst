@@ -44,11 +44,11 @@ recommended to use that versioning scheme as well.
 Versions are stored as tags in the repository. Each succesful build can yield a new tag.
 Each commit will only be tagged *once*. Since we might not need a package from every build,
 the tagging of a succesful build and the building of a package can be decoupled
-(``--skip-build``, ``--skip-tag``). An example of a apc-version command that tags a
+(``--skip-build``, ``--skip-tag``). An example of a vdt-version command that tags a
 succesful build is::
 
-    # tag detectionmodule
-    cd $WORKSPACE/src/detectionmodule
+    # tag foo
+    cd $WORKSPACE/src/foo
     $WORKSPACE/bin/version -v --build-number=$1 --plugin=debianize --skip-build
     git push --tags
 
@@ -58,18 +58,17 @@ Automated packaging
 Only at the point where we need the packages, they will be
 created. For now, the tags are created in the *DEVELOPMENT* environment, and the
 packages are built in the *TEST* environment. Packages are built simply by looking up the
-latest tag and creating a package from that. An example of a apc-version command that
+latest tag and creating a package from that. An example of a vdt-version command that
 builds a package is::
 
-    # build detectionmodule package and upload needed files
-    cd $WORKSPACE/src/detectionmodule
+    # build foo package and upload needed files
+    cd $WORKSPACE/src/foo
     fakeroot $WORKSPACE/bin/version -v --plugin=debianize --skip-tag
-    upload python-detectionmodule_*.deb
-    upload python-detectionmodule.d*.deb
+    upload python-foo_*.deb
+    upload python-foo.d*.deb
     upload python-puka_*.deb
 
 Here you can see that dependencies are also built automatically (and uploaded to the apt repo).
-All packages can be found at http://repo.dtc.avira.com/apc/apc-jenkins-build-artifacts/.
 
 Plugins
 =======
@@ -84,9 +83,9 @@ Create a new python package in the acp.versionplugin namespace and implement any
     def set_package_version(version)
 
 Implementing these methods is **optional**. The ones you don't implement will be taken
-from https://github.dtc.avira.com/VDT/vdt.versionplugin.default (WIP)
+from https://github.com/devopsconsulting/vdt.versionplugin.default (WIP)
 
-A good example of a plugin that has packaging covered is: https://github.dtc.avira.com/VDT/vdt.versionplugin.debianize
+A good example of a plugin that has packaging covered is: https://github.com/devopsconsulting/vdt.versionplugin.debianize
 
 If your plugin is called ``balla`` it should live in a package called ``acp.versionplugin.balla``.
 
