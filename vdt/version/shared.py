@@ -128,7 +128,7 @@ class Version(object):
     @contextlib.contextmanager
     def checkout_tag(self):
         try:
-            log.debug(branch = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).rstrip())
+            branch = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).rstrip()
             log.debug(subprocess.check_output(['git', 'checkout', str(self)]))
             yield
         except subprocess.CalledProcessError as e:
