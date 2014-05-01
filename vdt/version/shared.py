@@ -129,9 +129,12 @@ class Version(object):
             branch = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).rstrip()
             subprocess.check_call(['git', 'checkout', str(self)])
             yield
-            subprocess.check_call(['git', 'checkout', branch])
         except subprocess.CalledProcessError as e:
             log.error("Package creation failed: {0}".format(e))
+            log.error(e.output)
+            sys.exit(e.returncode)
+        finally:
+            subprocess.check_call(['git', 'checkout', branch])
 
     def __str__(self):
         if self.build_number is not None:
