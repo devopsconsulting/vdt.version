@@ -128,15 +128,15 @@ class Version(object):
     @contextlib.contextmanager
     def checkout_tag(self):
         try:
-            branch = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).rstrip()
-            subprocess.check_call(['git', 'checkout', str(self)])
+            log.debug(branch = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).rstrip())
+            log.debug(subprocess.check_output(['git', 'checkout', str(self)]))
             yield
         except subprocess.CalledProcessError as e:
             log.error("Package creation failed: {0}".format(e))
             log.error(e.output)
             sys.exit(e.returncode)
         finally:
-            subprocess.check_call(['git', 'checkout', branch])
+            log.debug(subprocess.check_call(['git', 'checkout', branch]))
 
     def __str__(self):
         if self.build_number is not None:
