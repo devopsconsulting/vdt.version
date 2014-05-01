@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
-import logging
 import argparse
+import logging
 import subprocess
+import sys
 
 from vdt.version.repo import GitRepository
 from vdt.version.shared import VersionError
 from vdt.version.utils import UnknownPlugin, query_yes_no
+
 
 def run(config, extra_args):
     version = None
@@ -19,14 +21,18 @@ def run(config, extra_args):
             # we don't want the extra args to get lost in update_version.
             if not version.extra_args:
                 version.extra_args = extra_args
+
         if not config.skip_build:
-            repo.build_package(version)
+            sys.exit(repo.build_package(version))
+
     except (VersionError, UnknownPlugin) as e:
         logging.error(e.message)
         # if something went wrong, ask to undo the tagging.
         msg = "An error occurred, do you need me to remove the tag %s?"
         if version and query_yes_no(msg % version, default="no"):
             subprocess.call(['git', 'tag', '--delete' , str(version)])
+
+        sys.exit(1)
 
 
 def main():

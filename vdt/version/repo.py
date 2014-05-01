@@ -1,8 +1,10 @@
 import logging
 
+from vdt.version.utils import load_plugin_by_name
+
+
 log = logging.getLogger('vdt.version.repo')
 
-from vdt.version.utils import load_plugin_by_name
 
 
 class GitRepository(object):
@@ -56,5 +58,5 @@ class GitRepository(object):
         else:
             # if needed update the version in the package
             self.call_plugin_function('set_package_version', version)
-            # create a debian package with the new version.
-            self.call_plugin_function('build_package', version)
+            # create a package with the new version.
+            return self.call_plugin_function('build_package', version)
