@@ -1,10 +1,12 @@
 """
 The functions and objects in this file can be used in your plugins.
 """
-import os.path
 import contextlib
 import logging
+import os.path
 import subprocess
+import sys
+
 
 BUILD_TAG = 'jenkins'
 log = logging.getLogger('vdt.version.shared')
