@@ -4,7 +4,7 @@ from setuptools import find_packages, setup
 pkgname = "vdt.version"
 
 setup(name=pkgname,
-      version="0.1.1",
+      version="0.1.2",
       description="Version Increment Tool for GIT",
       author="Lars van de Kerkhof",
       author_email="lars@devopsconsulting.nl",

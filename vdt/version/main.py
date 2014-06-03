@@ -2,7 +2,6 @@
 import argparse
 import logging
 import subprocess
-import sys
 
 from vdt.version.repo import GitRepository
 from vdt.version.shared import VersionError
@@ -23,7 +22,7 @@ def run(config, extra_args):
                 version.extra_args = extra_args
 
         if not config.skip_build:
-            sys.exit(repo.build_package(version))
+            return repo.build_package(version)
 
     except (VersionError, UnknownPlugin) as e:
         logging.error(e.message)
@@ -32,7 +31,7 @@ def run(config, extra_args):
         if version and query_yes_no(msg % version, default="no"):
             subprocess.call(['git', 'tag', '--delete' , str(version)])
 
-        sys.exit(1)
+        return 1
 
 
 def main():
@@ -55,7 +54,7 @@ def main():
     logging.basicConfig(level=loglevel)
     log = logging.getLogger('vdt.version')
     
-    run(args, extra_args)
+    return run(args, extra_args)
 
 
 if __name__ == "__main__":
