@@ -16,7 +16,7 @@ setup(name=pkgname,
       zip_safe=True,
       install_requires=[
           "setuptools",
-          "straight.plugin",
+          "straight.plugin>=1.4.0-post-1",
           "vdt.versionplugin.default",
       ],
       entry_points={
