@@ -101,15 +101,13 @@ def change_directory(path=None):
 def empty_directory(path=None):
     """
     Context manager that creates a temporary directory, and cleans it up
-    when exiting. It also changes the current directory into the newly
-    created temporary dir.
+    when exiting.
     
     >>> with empty_directory():
     >>>     pass
     """
     install_dir = tempfile.mkdtemp(dir=path)
-    with change_directory(install_dir):
-        try:
-            yield install_dir
-        finally:
-            shutil.rmtree(install_dir)
+    try:
+        yield install_dir
+    finally:
+        shutil.rmtree(install_dir)
