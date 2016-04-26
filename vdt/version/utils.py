@@ -1,9 +1,18 @@
+import logging
+import contextlib
 import sys
+import tempfile
+import shutil
+import glob
+from os import getcwd, chdir
 
 from straight.plugin import load
 
 
+logger = logging.getLogger(__name__)
+
 PLUGIN_NAMESPACE = 'vdt.versionplugin'
+
 
 class UnknownPlugin(Exception):
     def __init__(self, plugins):
@@ -65,3 +74,39 @@ def query_yes_no(question, default="yes"):
         else:
             sys.stdout.write("Please respond with 'yes' or 'no' "\
                              "(or 'y' or 'n').\n")
+
+
+@contextlib.contextmanager
+def change_directory(path=None):
+    """
+    Context manager that changes directory and resets it when existing
+    
+    >>> with change_directory('/tmp'):
+    >>>     pass
+    """
+    if path is not None:
+        try:
+            oldpwd = getcwd()
+            logger.debug('changing directory from %s to %s' % (oldpwd, path))
+            chdir(path)
+            yield
+        finally:
+            chdir(oldpwd)
+    else:
+        yield
+
+
+@contextlib.contextmanager
+def empty_directory(path=None):
+    """
+    Context manager that creates a temporary directory, and cleans it up
+    when exiting.
+    
+    >>> with empty_directory():
+    >>>     pass
+    """
+    install_dir = tempfile.mkdtemp(dir=path)
+    try:
+        yield install_dir
+    finally:
+        shutil.rmtree(install_dir)
