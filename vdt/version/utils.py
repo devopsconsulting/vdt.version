@@ -89,7 +89,6 @@ def change_directory(path=None):
             oldpwd = getcwd()
             logger.debug('changing directory from %s to %s' % (oldpwd, path))
             chdir(path)
-            print glob.glob(path)
             yield
         finally:
             chdir(oldpwd)
