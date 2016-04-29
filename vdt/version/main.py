@@ -5,7 +5,10 @@ import subprocess
 
 from vdt.version.repo import GitRepository
 from vdt.version.shared import VersionError
-from vdt.version.utils import UnknownPlugin, query_yes_no
+from vdt.version.utils import query_yes_no, UnknownPlugin
+
+
+logger = logging.getLogger('vdt.version')
 
 
 def run(config, extra_args):
@@ -25,18 +28,21 @@ def run(config, extra_args):
             return repo.build_package(version)
 
     except (VersionError, UnknownPlugin) as e:
-        logging.error(e.message)
+        logger.error(e.message)
         # if something went wrong, ask to undo the tagging.
         msg = "An error occurred, do you need me to remove the tag %s?"
         if version and query_yes_no(msg % version, default="no"):
-            subprocess.call(['git', 'tag', '--delete' , str(version)])
+            subprocess.call(['git', 'tag', '--delete', str(version)])
 
         return 1
 
 
-def main():
-    p = argparse.ArgumentParser(description="Version increment tool for GIT repositories")
-    
+def parse_args(args=None):
+    # we keep this is a separate method so we can call this from
+    # other software (eg vdt.recipe.version)
+    p = argparse.ArgumentParser(
+        description="Version increment tool for GIT repositories")
+
     p.add_argument("-p", "--patch", default=False, action="store_true", help="increment the patch number")
     p.add_argument("-m", "--minor", default=False, action="store_true", help="increment minor number")
     p.add_argument("-M", "--major", default=False, action="store_true", help="increment major number")
@@ -48,15 +54,16 @@ def main():
     p.add_argument("--skip-build", default=False, dest="skip_build" , action="store_true", help="tag only, don't build")
     p.add_argument("--skip-tag", default=False, dest="skip_tag", action="store_true", help="build only, don't tag")
     p.add_argument("-v", "--verbose", default=False, dest="verbose", action="store_true", help="more output")
-    args, extra_args = p.parse_known_args()
-    
+    args, extra_args = p.parse_known_args(args)
+    return args, extra_args
+
+
+def main():
+    args, extra_args = parse_args()
     loglevel = logging.DEBUG if args.verbose else logging.INFO
     logging.basicConfig(level=loglevel)
-    log = logging.getLogger('vdt.version')
-    
     return run(args, extra_args)
 
 
 if __name__ == "__main__":
     main()
-
