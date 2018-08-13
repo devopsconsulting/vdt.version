@@ -28,7 +28,7 @@ def run(config, extra_args):
             return repo.build_package(version)
 
     except (VersionError, UnknownPlugin) as e:
-        logger.error(e.message)
+        logger.error(e)
         # if something went wrong, ask to undo the tagging.
         msg = "An error occurred, do you need me to remove the tag %s?"
         if version and query_yes_no(msg % version, default="no"):

@@ -21,7 +21,7 @@ def parse_version_string(version_string):
     ([0, 3, 2], 'jenkins', 3447876)
     """
     components = version_string.split('-') + [None, None]
-    version = map(int, components[0].split('.'))
+    version = list(map(int, components[0].split('.')))
     build_tag = components[1] if components[1] else BUILD_TAG
     build_number = int(components[2]) if components[2] else components[2]
 
