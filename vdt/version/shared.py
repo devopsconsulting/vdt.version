@@ -1,6 +1,7 @@
 """
 The functions and objects in this file can be used in your plugins.
 """
+from functools import total_ordering
 import contextlib
 import logging
 import os.path
@@ -54,6 +55,7 @@ class VersionNotFound(VersionError):
     pass
 
 
+@total_ordering
 class Version(object):
     """
     Represent a version object with a nice
@@ -77,6 +79,20 @@ class Version(object):
     >>> a.build_number = 876876
     >>> str(a)
     '4.0.0-lol-876876'
+    >>> b = Version('4.0.0-lol-8768778')
+    >>> b == a
+    True
+    >>> b >= a
+    True
+    >>> b.major += 1
+    >>> b > a
+    True
+    >>> b >= a
+    True
+    >>> b <= a
+    False
+    >>> b < a
+    False
     """
     def __init__(self, version_string, annotated=False, changelog="", extra_args=[], userdata={}):
         (version, self.build_tag, self.build_number) = \
@@ -113,6 +129,12 @@ class Version(object):
     @property
     def version(self):
         return [self._major, self._minor, self.patch]
+
+    def __eq__(self, other):
+        return self.version == other.version
+
+    def __lt__(self, other):
+        return self.version < other.version
 
     @property
     def changelog(self):
