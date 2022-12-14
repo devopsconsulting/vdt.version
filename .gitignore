@@ -2,3 +2,8 @@
 *.pyc
 *~
 ._*
+python-straight.plugin_1.4.1_all.deb
+python-vdt.version_0.1.4_all.deb
+python-vdt.versionplugin.default_0.0.2_all.deb
+*.tar.gz
+*.whl
